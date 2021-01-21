@@ -7,12 +7,13 @@ using Travis.Models;
 namespace Travis.Controllers
 {
     [ApiController]
+    [Route("[controller]")]
     public class CodeController : ControllerBase
     {
         readonly CodeConfig _codeConfig;
         readonly IMemoryCache _cache;
 
-        public CodeController(IMemoryCache cache, IOptionsSnapshot<CodeConfig> codeConfig)
+        public CodeController(IMemoryCache cache, IOptionsSnapshot<CodeConfig> codeConfig, IOptions<CodeConfig> config)
         {
             _cache = cache;
             _codeConfig = codeConfig?.Value ?? throw new System.Exception("Missing config for code");
@@ -28,6 +29,16 @@ namespace Travis.Controllers
             });
 
             return Ok(code);
+        }
+
+        [HttpPost("validate")]
+        public IActionResult Validate(string code)
+        {
+            if (string.IsNullOrWhiteSpace(code))
+                return BadRequest();
+
+            var cachedCode = _cache.Get<Code>("code");
+            return Ok(cachedCode?.Value == code);
         }
     }
 }

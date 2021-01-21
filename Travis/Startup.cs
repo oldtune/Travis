@@ -27,10 +27,14 @@ namespace Travis
         {
             services.AddHttpContextAccessor();
 
-            services.AddOptions<CodeConfig>(nameof(CodeConfig));
-
             services.AddGrpc();
             services.AddGrpcReflection();
+
+            services.AddControllers();
+
+            services.AddMemoryCache();
+
+            services.Configure<CodeConfig>(Configuration.GetSection(nameof(CodeConfig)));
 
             services.AddSwaggerGen(c =>
             {

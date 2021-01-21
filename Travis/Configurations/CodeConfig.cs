@@ -5,7 +5,6 @@ namespace Travis.Configurations
     public class CodeConfig
     {
         private int _codeLength;
-        public TimeSpan ExpireTimeSpan { set; get; }
         public int CodeLength
         {
             get { return _codeLength; }
@@ -15,5 +14,9 @@ namespace Travis.Configurations
                 else _codeLength = value;
             }
         }
+
+        public int ExpireInSecond { set; get; }
+
+        public TimeSpan ExpireTimeSpan => TimeSpan.FromSeconds(ExpireInSecond);
     }
 }
