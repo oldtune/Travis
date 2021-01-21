@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option csharp_namespace = "Travis";
+
+package geo;
+
+service Geo {
+  rpc DetermineAddress(GeoCode) returns (Address);
+  rpc DetermineGeoCode(Address) returns (GeoCode);
+}
+
+message GeoCode{
+	double Lat = 1;
+	double Long = 2;
+}
+
+message Address{
+	string Name = 1;
+	string CompanyName = 2;
+	string Street = 3;
+	string CityArea = 4;
+	string District = 5;
+	string City = 6;
+	string Town = 7;
+	string Villege = 8;
+	string County = 9;
+	string PostalCode = 10;
+	string Country = 11;
+	string Continent = 12;
+}
