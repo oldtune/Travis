@@ -33,10 +33,9 @@ namespace Travis
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers(c =>
-            {
-                c.Filters.Add(typeof(ResponseWrapperFilter));
-            });
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
 
             services.AddHttpContextAccessor();
 
@@ -94,7 +93,7 @@ namespace Travis
             string connectionString = Configuration.GetConnectionString(SettingContants.ConnectionStrings.UserDbConnectionString);
             services.AddDbContextPool<UserDbContext>(option => option.UseSqlServer(connectionString));
 
-            services.AddTransient<LoggingContextMiddleware>();
+            //services.AddTransient<LoggingContextMiddleware>();
 
             services.AddAuthentication()
             .AddGoogle(options =>
@@ -105,6 +104,10 @@ namespace Travis
                 options.ClientId = googleAuthNSection["ClientId"];
                 options.ClientSecret = googleAuthNSection["ClientSecret"];
             });
+
+            services.AddHttpClient();
+
+            services.Configure<FetchOptions>(Configuration.GetSection(nameof(FetchOptions)));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -119,7 +122,7 @@ namespace Travis
 
             app.UseCors();
 
-            app.UseFactoryActivatedMiddleware();
+            //app.UseFactoryActivatedMiddleware();
 
             app.UseEndpoints(endpoints =>
             {

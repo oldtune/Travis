@@ -3,12 +3,13 @@
 namespace Travis.Controllers
 {
     [ApiController]
+    [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
         [HttpGet("")]
         public void Now(GeoCode geoCode)
         {
-            return 
+            
         }
     }
 }
